@@ -5,6 +5,8 @@ import { nanoid } from 'nanoid';
 import { Filter } from './Filter/Filter';
 import css from './App.module.css';
 
+const KEY = 'contacts';
+
 export class App extends React.Component {
   state = {
     contacts: [
@@ -15,6 +17,18 @@ export class App extends React.Component {
     ],
     filter: '',
   };
+
+  componentDidMount() {
+    if (JSON.parse(localStorage.getItem(KEY))) {
+      this.setState({ contacts: JSON.parse(localStorage.getItem(KEY)) });
+    }
+  }
+
+  componentDidUpdate(_, prevState) {
+    if (this.state.contacts !== prevState.contacts) {
+      localStorage.setItem(KEY, JSON.stringify(this.state.contacts));
+    }
+  }
 
   onChangeInput = evt => {
     const { name, value } = evt.currentTarget;
